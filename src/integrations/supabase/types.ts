@@ -14,7 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      books: {
+        Row: {
+          author: string
+          checked_out_at: string | null
+          checked_out_by: string | null
+          created_at: string
+          description: string | null
+          genre: string | null
+          id: string
+          isbn: string | null
+          published_year: number | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          checked_out_at?: string | null
+          checked_out_by?: string | null
+          created_at?: string
+          description?: string | null
+          genre?: string | null
+          id?: string
+          isbn?: string | null
+          published_year?: number | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          checked_out_at?: string | null
+          checked_out_by?: string | null
+          created_at?: string
+          description?: string | null
+          genre?: string | null
+          id?: string
+          isbn?: string | null
+          published_year?: number | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      checkout_history: {
+        Row: {
+          action: string
+          action_date: string
+          book_id: string
+          borrower_name: string | null
+          id: string
+          notes: string | null
+        }
+        Insert: {
+          action: string
+          action_date?: string
+          book_id: string
+          borrower_name?: string | null
+          id?: string
+          notes?: string | null
+        }
+        Update: {
+          action?: string
+          action_date?: string
+          book_id?: string
+          borrower_name?: string | null
+          id?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkout_history_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
