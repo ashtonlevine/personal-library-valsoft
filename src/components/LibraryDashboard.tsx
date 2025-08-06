@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { BookForm } from "./BookForm";
 import { CheckoutDialog } from "./CheckoutDialog";
 import { RandomBookSelector } from "./RandomBookSelector";
-import { AIBookFinder } from "./AIBookFinder";
 import { TimmyChat } from "./TimmyChat";
 import { toast } from "@/hooks/use-toast";
 import { Search, Plus, BookOpen, Users, CheckCircle, Clock } from "lucide-react";
@@ -190,11 +189,6 @@ export const LibraryDashboard = () => {
             <RandomBookSelector />
           </CardContent>
         </Card>
-
-        {/* AI Book Finder */}
-        <div className="mb-8">
-          <AIBookFinder />
-        </div>
 
         {/* Search and Add Book */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
