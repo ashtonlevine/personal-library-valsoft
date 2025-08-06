@@ -121,6 +121,31 @@ Make sure to only return book IDs that exist in the provided collection.`
     });
 
     const aiResponse = await response.json();
+    console.log('OpenAI response:', JSON.stringify(aiResponse, null, 2));
+    
+    // Check if the response is valid
+    if (!response.ok) {
+      console.error('OpenAI API error:', aiResponse);
+      return new Response(
+        JSON.stringify({ error: `OpenAI API error: ${aiResponse.error?.message || 'Unknown error'}` }), 
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    if (!aiResponse.choices || !aiResponse.choices[0] || !aiResponse.choices[0].message) {
+      console.error('Invalid OpenAI response structure:', aiResponse);
+      return new Response(
+        JSON.stringify({ error: 'Invalid response from AI service' }), 
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     const aiContent = aiResponse.choices[0].message.content;
     
     let aiResult;
