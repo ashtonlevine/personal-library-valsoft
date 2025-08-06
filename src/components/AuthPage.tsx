@@ -107,23 +107,23 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--gradient-meadow)' }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--gradient-meadow)' }}>
       <Card className="w-full max-w-md shadow-lg" style={{ boxShadow: 'var(--shadow-gentle)' }}>
-        <CardHeader className="text-center px-4 pt-6 pb-4">
+        <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <BookOpen className="h-10 w-10 sm:h-12 sm:w-12 text-primary" />
+            <BookOpen className="h-12 w-12 text-primary" />
           </div>
-          <CardTitle className="text-xl sm:text-2xl font-bold">
+          <CardTitle className="text-2xl font-bold">
             {isLogin ? "Welcome Back" : "Create Account"}
           </CardTitle>
-          <CardDescription className="text-sm sm:text-base">
+          <CardDescription>
             {isLogin 
               ? "Enter your credentials to access your personal library" 
               : "Sign up to create your personal library"
             }
           </CardDescription>
         </CardHeader>
-        <CardContent className="px-4 pb-6">
+        <CardContent>
           <form onSubmit={handleAuth} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -135,7 +135,7 @@ const AuthPage = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-11 text-base"
+                  className="pl-10"
                   required
                 />
               </div>
@@ -151,7 +151,7 @@ const AuthPage = () => {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 h-11 text-base"
+                  className="pl-10 pr-10"
                   required
                 />
                 <Button
@@ -181,7 +181,7 @@ const AuthPage = () => {
                     placeholder="Confirm your password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="pl-10 h-11 text-base"
+                    className="pl-10"
                     required
                   />
                 </div>
@@ -190,7 +190,7 @@ const AuthPage = () => {
 
             <Button 
               type="submit" 
-              className="w-full bg-primary hover:bg-primary/90 h-11 text-base font-medium"
+              className="w-full bg-primary hover:bg-primary/90"
               disabled={isLoading}
               style={{ boxShadow: 'var(--shadow-leaf)' }}
             >
