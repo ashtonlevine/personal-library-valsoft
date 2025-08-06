@@ -38,20 +38,52 @@ export const LibraryDashboard = () => {
   const queryClient = useQueryClient();
 
   // Fetch books with search
-  const { data: books = [], isLoading } = useQuery({
+  const { data: books = [], isLoading, error } = useQuery({
     queryKey: ['books', searchTerm],
     queryFn: async () => {
-      let query = supabase.from('books').select('*').order('created_at', { ascending: false });
-      
-      if (searchTerm) {
-        query = query.or(`title.ilike.%${searchTerm}%,author.ilike.%${searchTerm}%,genre.ilike.%${searchTerm}%`);
+      console.log('Fetching books...');
+      try {
+        let query = supabase.from('books').select('*').order('created_at', { ascending: false });
+        
+        if (searchTerm) {
+          query = query.or(`title.ilike.%${searchTerm}%,author.ilike.%${searchTerm}%,genre.ilike.%${searchTerm}%`);
+        }
+        
+        const { data, error } = await query;
+        console.log('Books query result:', { data, error });
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+        return data as Book[];
+      } catch (err) {
+        console.error('Error in books query:', err);
+        throw err;
       }
-      
-      const { data, error } = await query;
-      if (error) throw error;
-      return data as Book[];
     },
   });
+
+  // Debug logging
+  console.log('LibraryDashboard render:', { books, isLoading, error });
+
+  // Show error if query failed
+  if (error) {
+    console.error('Query error:', error);
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="p-6">
+          <h2 className="text-xl font-bold text-destructive mb-2">Database Error</h2>
+          <p className="text-muted-foreground">Failed to load books. Please check the console for details.</p>
+          <Button 
+            onClick={() => window.location.reload()} 
+            className="mt-4"
+          >
+            Reload Page
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   // Update book status mutation
   const updateBookStatus = useMutation({
