@@ -10,7 +10,9 @@ import { CheckoutDialog } from "./CheckoutDialog";
 import { RandomBookSelector } from "./RandomBookSelector";
 import { TimmyChat } from "./TimmyChat";
 import { toast } from "@/hooks/use-toast";
-import { Search, Plus, BookOpen, Users, CheckCircle, Clock } from "lucide-react";
+import { Search, Plus, BookOpen, Users, CheckCircle, Clock, List, Grid2X2, LayoutGrid } from "lucide-react";
+
+type ViewMode = 'list' | 'column' | 'gallery';
 
 interface Book {
   id: string;
@@ -29,6 +31,7 @@ interface Book {
 
 export const LibraryDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>('gallery');
   const [showBookForm, setShowBookForm] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
@@ -211,12 +214,48 @@ export const LibraryDashboard = () => {
           </Button>
         </div>
 
-        {/* Books Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* View Toggle */}
+        <div className="flex justify-center mb-6">
+          <div className="flex bg-muted rounded-lg p-1">
+            <Button
+              variant={viewMode === 'list' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('list')}
+              className="rounded-md"
+            >
+              <List className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === 'column' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('column')}
+              className="rounded-md"
+            >
+              <Grid2X2 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === 'gallery' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('gallery')}
+              className="rounded-md"
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Books Display */}
+        <div className={
+          viewMode === 'list' 
+            ? "space-y-4" 
+            : viewMode === 'column'
+            ? "grid grid-cols-1 md:grid-cols-2 gap-4"
+            : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        }>
           {isLoading ? (
-            <div className="col-span-full text-center py-8">Loading books...</div>
+            <div className={viewMode === 'list' ? "text-center py-8" : "col-span-full text-center py-8"}>Loading books...</div>
           ) : books.length === 0 ? (
-            <div className="col-span-full text-center py-8">
+            <div className={viewMode === 'list' ? "text-center py-8" : "col-span-full text-center py-8"}>
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">
                 {searchTerm ? "No books found matching your search." : "No books in your library yet. Add your first book!"}
@@ -224,57 +263,114 @@ export const LibraryDashboard = () => {
             </div>
           ) : (
             books.map((book) => (
-              <Card key={book.id} className="hover:shadow-lg transition-shadow" style={{ boxShadow: 'var(--shadow-gentle)' }}>
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg">{book.title}</CardTitle>
-                      <CardDescription className="text-primary font-medium">by {book.author}</CardDescription>
+              viewMode === 'list' ? (
+                // List View
+                <Card key={book.id} className="hover:shadow-lg transition-shadow" style={{ boxShadow: 'var(--shadow-gentle)' }}>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-lg">{book.title}</h3>
+                            <p className="text-primary font-medium">by {book.author}</p>
+                            <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                              {book.genre && <span>Genre: {book.genre}</span>}
+                              {book.published_year && <span>Published: {book.published_year}</span>}
+                              {book.status === 'checked_out' && book.checked_out_by && (
+                                <span className="text-accent font-medium">Borrowed by: {book.checked_out_by}</span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge variant={book.status === 'available' ? 'default' : 'secondary'}>
+                              {book.status === 'available' ? 'Available' : 'Checked Out'}
+                            </Badge>
+                            <div className="flex gap-1">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleCheckout(book)}
+                              >
+                                {book.status === 'available' ? 'Check Out' : 'Return'}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedBook(book);
+                                  setShowBookForm(true);
+                                }}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => deleteBook.mutate(book.id)}
+                              >
+                                Delete
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <Badge variant={book.status === 'available' ? 'default' : 'secondary'}>
-                      {book.status === 'available' ? 'Available' : 'Checked Out'}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2 mb-4">
-                    {book.genre && <p className="text-sm text-muted-foreground">Genre: {book.genre}</p>}
-                    {book.published_year && <p className="text-sm text-muted-foreground">Published: {book.published_year}</p>}
-                    {book.isbn && <p className="text-sm text-muted-foreground">ISBN: {book.isbn}</p>}
-                    {book.status === 'checked_out' && book.checked_out_by && (
-                      <p className="text-sm text-accent font-medium">Borrowed by: {book.checked_out_by}</p>
-                    )}
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleCheckout(book)}
-                      className="flex-1"
-                    >
-                      {book.status === 'available' ? 'Check Out' : 'Return'}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setSelectedBook(book);
-                        setShowBookForm(true);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => deleteBook.mutate(book.id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              ) : (
+                // Column/Gallery View
+                <Card key={book.id} className="hover:shadow-lg transition-shadow" style={{ boxShadow: 'var(--shadow-gentle)' }}>
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg">{book.title}</CardTitle>
+                        <CardDescription className="text-primary font-medium">by {book.author}</CardDescription>
+                      </div>
+                      <Badge variant={book.status === 'available' ? 'default' : 'secondary'}>
+                        {book.status === 'available' ? 'Available' : 'Checked Out'}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 mb-4">
+                      {book.genre && <p className="text-sm text-muted-foreground">Genre: {book.genre}</p>}
+                      {book.published_year && <p className="text-sm text-muted-foreground">Published: {book.published_year}</p>}
+                      {book.isbn && <p className="text-sm text-muted-foreground">ISBN: {book.isbn}</p>}
+                      {book.status === 'checked_out' && book.checked_out_by && (
+                        <p className="text-sm text-accent font-medium">Borrowed by: {book.checked_out_by}</p>
+                      )}
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCheckout(book)}
+                        className="flex-1"
+                      >
+                        {book.status === 'available' ? 'Check Out' : 'Return'}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedBook(book);
+                          setShowBookForm(true);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => deleteBook.mutate(book.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )
             ))
           )}
         </div>
