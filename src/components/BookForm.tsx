@@ -114,7 +114,7 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] mx-4 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{book ? "Edit Book" : "Add New Book"}</DialogTitle>
           <DialogDescription>
@@ -123,7 +123,7 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="title">Title *</Label>
               <Input
@@ -131,6 +131,7 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
                 value={formData.title}
                 onChange={(e) => handleInputChange("title", e.target.value)}
                 placeholder="Book title"
+                className="h-10 text-base"
                 required
               />
             </div>
@@ -141,12 +142,13 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
                 value={formData.author}
                 onChange={(e) => handleInputChange("author", e.target.value)}
                 placeholder="Author name"
+                className="h-10 text-base"
                 required
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="isbn">ISBN</Label>
               <Input
@@ -154,6 +156,7 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
                 value={formData.isbn}
                 onChange={(e) => handleInputChange("isbn", e.target.value)}
                 placeholder="ISBN number"
+                className="h-10 text-base"
               />
             </div>
             <div className="space-y-2">
@@ -166,6 +169,7 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
                 placeholder="2023"
                 min="1000"
                 max="2030"
+                className="h-10 text-base"
               />
             </div>
           </div>
@@ -177,6 +181,7 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
               value={formData.genre}
               onChange={(e) => handleInputChange("genre", e.target.value)}
               placeholder="Fiction, Non-fiction, etc."
+              className="h-10 text-base"
             />
           </div>
 
@@ -188,14 +193,15 @@ export const BookForm = ({ book, open, onClose }: BookFormProps) => {
               onChange={(e) => handleInputChange("description", e.target.value)}
               placeholder="Brief description of the book"
               rows={3}
+              className="text-base resize-none"
             />
           </div>
 
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+          <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
+            <Button type="button" variant="outline" onClick={onClose} className="w-full sm:w-auto">
               Cancel
             </Button>
-            <Button type="submit" disabled={mutation.isPending}>
+            <Button type="submit" disabled={mutation.isPending} className="w-full sm:w-auto">
               {mutation.isPending ? "Saving..." : book ? "Update Book" : "Add Book"}
             </Button>
           </DialogFooter>

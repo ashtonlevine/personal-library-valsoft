@@ -173,33 +173,33 @@ export const LibraryDashboard = () => {
     <div className="min-h-screen" style={{ background: 'var(--gradient-meadow)' }}>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="text-center flex-1">
-            <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center justify-center gap-3">
-              <BookOpen className="text-primary" />
+        <div className="flex flex-col lg:flex-row justify-between items-center mb-6 lg:mb-8 gap-4">
+          <div className="text-center lg:text-left flex-1">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2 flex items-center justify-center lg:justify-start gap-3">
+              <BookOpen className="text-primary h-6 w-6 sm:h-8 sm:w-8" />
               Personal Library
             </h1>
-            <p className="text-muted-foreground">Manage your book collection with ease</p>
+            <p className="text-sm sm:text-base text-muted-foreground">Manage your book collection with ease</p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <User className="h-4 w-4" />
-              <span>{user?.email}</span>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full lg:w-auto">
+            <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+              <User className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="truncate max-w-[200px]">{user?.email}</span>
             </div>
             <Button
               onClick={signOut}
               variant="outline"
               size="sm"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 w-full sm:w-auto"
             >
-              <LogOut className="h-4 w-4" />
-              Sign Out
+              <LogOut className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="sm:inline">Sign Out</span>
             </Button>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
           <Card className="shadow-lg" style={{ boxShadow: 'var(--shadow-gentle)' }}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Books</CardTitle>
@@ -232,10 +232,10 @@ export const LibraryDashboard = () => {
         </div>
 
         {/* Random Book Selector */}
-        <Card className="mb-8 shadow-lg" style={{ boxShadow: 'var(--shadow-gentle)' }}>
-          <CardHeader>
-            <CardTitle>Feeling Lucky?</CardTitle>
-            <CardDescription>
+        <Card className="mb-6 lg:mb-8 shadow-lg" style={{ boxShadow: 'var(--shadow-gentle)' }}>
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg sm:text-xl">Feeling Lucky?</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Can't decide what to read? Let us pick a random book for you!
             </CardDescription>
           </CardHeader>
@@ -245,19 +245,19 @@ export const LibraryDashboard = () => {
         </Card>
 
         {/* Search and Add Book */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <div className="relative flex-1">
+        <div className="flex flex-col gap-3 sm:gap-4 mb-6 lg:mb-8">
+          <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search books by title, author, or genre..."
+              placeholder="Search books..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              className="pl-10 h-11 text-base"
             />
           </div>
           <Button
             onClick={() => setShowBookForm(true)}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-primary hover:bg-primary/90 h-11 text-base font-medium"
             style={{ boxShadow: 'var(--shadow-leaf)' }}
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -266,31 +266,34 @@ export const LibraryDashboard = () => {
         </div>
 
         {/* View Toggle */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-4 lg:mb-6">
           <div className="flex bg-muted rounded-lg p-1">
             <Button
               variant={viewMode === 'list' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('list')}
-              className="rounded-md"
+              className="rounded-md px-3 py-2"
             >
               <List className="h-4 w-4" />
+              <span className="hidden sm:inline ml-2">List</span>
             </Button>
             <Button
               variant={viewMode === 'column' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('column')}
-              className="rounded-md"
+              className="rounded-md px-3 py-2"
             >
               <Grid2X2 className="h-4 w-4" />
+              <span className="hidden sm:inline ml-2">Grid</span>
             </Button>
             <Button
               variant={viewMode === 'gallery' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('gallery')}
-              className="rounded-md"
+              className="rounded-md px-3 py-2"
             >
               <LayoutGrid className="h-4 w-4" />
+              <span className="hidden sm:inline ml-2">Cards</span>
             </Button>
           </div>
         </div>
@@ -298,10 +301,10 @@ export const LibraryDashboard = () => {
         {/* Books Display */}
         <div className={
           viewMode === 'list' 
-            ? "space-y-4" 
+            ? "space-y-3 sm:space-y-4" 
             : viewMode === 'column'
-            ? "grid grid-cols-1 md:grid-cols-2 gap-4"
-            : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            ? "grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
+            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6"
         }>
           {isLoading ? (
             <div className={viewMode === 'list' ? "text-center py-8" : "col-span-full text-center py-8"}>Loading books...</div>
@@ -317,53 +320,54 @@ export const LibraryDashboard = () => {
               viewMode === 'list' ? (
                 // List View
                 <Card key={book.id} className="hover:shadow-lg transition-shadow" style={{ boxShadow: 'var(--shadow-gentle)' }}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-4">
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-lg">{book.title}</h3>
-                            <p className="text-primary font-medium">by {book.author}</p>
-                            <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                              {book.genre && <span>Genre: {book.genre}</span>}
-                              {book.published_year && <span>Published: {book.published_year}</span>}
-                              {book.status === 'checked_out' && book.checked_out_by && (
-                                <span className="text-accent font-medium">Borrowed by: {book.checked_out_by}</span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Badge variant={book.status === 'available' ? 'default' : 'secondary'}>
-                              {book.status === 'available' ? 'Available' : 'Checked Out'}
-                            </Badge>
-                            <div className="flex gap-1">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => handleCheckout(book)}
-                              >
-                                {book.status === 'available' ? 'Check Out' : 'Return'}
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  setSelectedBook(book);
-                                  setShowBookForm(true);
-                                }}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => deleteBook.mutate(book.id)}
-                              >
-                                Delete
-                              </Button>
-                            </div>
-                          </div>
+                  <CardContent className="p-3 sm:p-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-start gap-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-base sm:text-lg truncate">{book.title}</h3>
+                          <p className="text-primary font-medium text-sm sm:text-base">by {book.author}</p>
                         </div>
+                        <Badge variant={book.status === 'available' ? 'default' : 'secondary'} className="text-xs">
+                          {book.status === 'available' ? 'Available' : 'Checked Out'}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 text-xs sm:text-sm text-muted-foreground">
+                        {book.genre && <span className="bg-muted px-2 py-1 rounded">Genre: {book.genre}</span>}
+                        {book.published_year && <span className="bg-muted px-2 py-1 rounded">Published: {book.published_year}</span>}
+                        {book.status === 'checked_out' && book.checked_out_by && (
+                          <span className="text-accent font-medium bg-accent/10 px-2 py-1 rounded">Borrowed by: {book.checked_out_by}</span>
+                        )}
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleCheckout(book)}
+                          className="flex-1 text-xs sm:text-sm"
+                        >
+                          {book.status === 'available' ? 'Check Out' : 'Return'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedBook(book);
+                            setShowBookForm(true);
+                          }}
+                          className="text-xs sm:text-sm"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => deleteBook.mutate(book.id)}
+                          className="text-xs sm:text-sm"
+                        >
+                          Delete
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -371,33 +375,33 @@ export const LibraryDashboard = () => {
               ) : (
                 // Column/Gallery View
                 <Card key={book.id} className="hover:shadow-lg transition-shadow" style={{ boxShadow: 'var(--shadow-gentle)' }}>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <CardTitle className="text-lg">{book.title}</CardTitle>
-                        <CardDescription className="text-primary font-medium">by {book.author}</CardDescription>
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-base sm:text-lg leading-tight">{book.title}</CardTitle>
+                        <CardDescription className="text-primary font-medium text-sm">by {book.author}</CardDescription>
                       </div>
-                      <Badge variant={book.status === 'available' ? 'default' : 'secondary'}>
+                      <Badge variant={book.status === 'available' ? 'default' : 'secondary'} className="text-xs shrink-0">
                         {book.status === 'available' ? 'Available' : 'Checked Out'}
                       </Badge>
                     </div>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="space-y-2 mb-4">
-                      {book.genre && <p className="text-sm text-muted-foreground">Genre: {book.genre}</p>}
-                      {book.published_year && <p className="text-sm text-muted-foreground">Published: {book.published_year}</p>}
-                      {book.isbn && <p className="text-sm text-muted-foreground">ISBN: {book.isbn}</p>}
+                      {book.genre && <p className="text-xs sm:text-sm text-muted-foreground bg-muted px-2 py-1 rounded inline-block">Genre: {book.genre}</p>}
+                      {book.published_year && <p className="text-xs sm:text-sm text-muted-foreground bg-muted px-2 py-1 rounded inline-block ml-2">Published: {book.published_year}</p>}
+                      {book.isbn && <p className="text-xs sm:text-sm text-muted-foreground">ISBN: {book.isbn}</p>}
                       {book.status === 'checked_out' && book.checked_out_by && (
-                        <p className="text-sm text-accent font-medium">Borrowed by: {book.checked_out_by}</p>
+                        <p className="text-xs sm:text-sm text-accent font-medium bg-accent/10 px-2 py-1 rounded">Borrowed by: {book.checked_out_by}</p>
                       )}
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleCheckout(book)}
-                        className="flex-1"
+                        className="flex-1 text-xs sm:text-sm"
                       >
                         {book.status === 'available' ? 'Check Out' : 'Return'}
                       </Button>
@@ -408,6 +412,7 @@ export const LibraryDashboard = () => {
                           setSelectedBook(book);
                           setShowBookForm(true);
                         }}
+                        className="text-xs sm:text-sm"
                       >
                         Edit
                       </Button>
@@ -415,6 +420,7 @@ export const LibraryDashboard = () => {
                         variant="destructive"
                         size="sm"
                         onClick={() => deleteBook.mutate(book.id)}
+                        className="text-xs sm:text-sm"
                       >
                         Delete
                       </Button>
