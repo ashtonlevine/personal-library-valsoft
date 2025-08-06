@@ -9,8 +9,9 @@ import { BookForm } from "./BookForm";
 import { CheckoutDialog } from "./CheckoutDialog";
 import { RandomBookSelector } from "./RandomBookSelector";
 import { TimmyChat } from "./TimmyChat";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
-import { Search, Plus, BookOpen, Users, CheckCircle, Clock, List, Grid2X2, LayoutGrid } from "lucide-react";
+import { Search, Plus, BookOpen, Users, CheckCircle, Clock, List, Grid2X2, LayoutGrid, LogOut, User } from "lucide-react";
 
 type ViewMode = 'list' | 'column' | 'gallery';
 
@@ -30,6 +31,7 @@ interface Book {
 }
 
 export const LibraryDashboard = () => {
+  const { user, signOut } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>('gallery');
   const [showBookForm, setShowBookForm] = useState(false);
@@ -171,12 +173,29 @@ export const LibraryDashboard = () => {
     <div className="min-h-screen" style={{ background: 'var(--gradient-meadow)' }}>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center justify-center gap-3">
-            <BookOpen className="text-primary" />
-            Personal Library
-          </h1>
-          <p className="text-muted-foreground">Manage your book collection with ease</p>
+        <div className="flex justify-between items-center mb-8">
+          <div className="text-center flex-1">
+            <h1 className="text-4xl font-bold text-foreground mb-2 flex items-center justify-center gap-3">
+              <BookOpen className="text-primary" />
+              Personal Library
+            </h1>
+            <p className="text-muted-foreground">Manage your book collection with ease</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <User className="h-4 w-4" />
+              <span>{user?.email}</span>
+            </div>
+            <Button
+              onClick={signOut}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
