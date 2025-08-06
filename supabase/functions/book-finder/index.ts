@@ -11,6 +11,7 @@ interface Book {
   id: string;
   title: string;
   author: string;
+  isbn: string | null;
   genre: string | null;
   description: string | null;
   published_year: number | null;
@@ -73,6 +74,7 @@ serve(async (req) => {
       id: book.id,
       title: book.title,
       author: book.author,
+      isbn: book.isbn,
       genre: book.genre,
       description: book.description,
       published_year: book.published_year,
@@ -100,6 +102,7 @@ When a user asks for books, analyze their request and return the most relevant b
 - Genre preferences
 - Author names
 - Book titles
+- ISBN numbers
 - Themes or topics
 - Publication years
 - Book descriptions

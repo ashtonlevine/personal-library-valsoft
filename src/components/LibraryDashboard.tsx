@@ -48,7 +48,7 @@ export const LibraryDashboard = () => {
         let query = supabase.from('books').select('*').order('created_at', { ascending: false });
         
         if (searchTerm) {
-          query = query.or(`title.ilike.%${searchTerm}%,author.ilike.%${searchTerm}%,genre.ilike.%${searchTerm}%`);
+          query = query.or(`title.ilike.%${searchTerm}%,author.ilike.%${searchTerm}%,genre.ilike.%${searchTerm}%,isbn.ilike.%${searchTerm}%`);
         }
         
         const { data, error } = await query;
@@ -249,7 +249,7 @@ export const LibraryDashboard = () => {
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search books..."
+              placeholder="Search books by title, author, genre, or ISBN..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 h-11 text-base"
