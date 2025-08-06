@@ -126,8 +126,24 @@ Make sure to only return book IDs that exist in the provided collection.`
     // Check if the response is valid
     if (!response.ok) {
       console.error('OpenAI API error:', aiResponse);
+      const errorMessage = aiResponse.error?.message || 'Unknown error';
+      
+      // Handle quota exceeded error specifically
+      if (aiResponse.error?.code === 'insufficient_quota') {
+        return new Response(
+          JSON.stringify({ 
+            error: 'OpenAI API quota exceeded. Please check your OpenAI billing and add credits to your account.',
+            type: 'quota_exceeded'
+          }), 
+          { 
+            status: 429, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+          }
+        );
+      }
+      
       return new Response(
-        JSON.stringify({ error: `OpenAI API error: ${aiResponse.error?.message || 'Unknown error'}` }), 
+        JSON.stringify({ error: `OpenAI API error: ${errorMessage}` }), 
         { 
           status: 500, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 

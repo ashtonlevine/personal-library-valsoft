@@ -9,6 +9,7 @@ import { BookForm } from "./BookForm";
 import { CheckoutDialog } from "./CheckoutDialog";
 import { RandomBookSelector } from "./RandomBookSelector";
 import { AIBookFinder } from "./AIBookFinder";
+import { TimmyChat } from "./TimmyChat";
 import { toast } from "@/hooks/use-toast";
 import { Search, Plus, BookOpen, Users, CheckCircle, Clock } from "lucide-react";
 
