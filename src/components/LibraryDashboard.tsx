@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { BookForm } from "./BookForm";
 import { CheckoutDialog } from "./CheckoutDialog";
+import { RandomBookSelector } from "./RandomBookSelector";
+import { AIBookFinder } from "./AIBookFinder";
 import { toast } from "@/hooks/use-toast";
 import { Search, Plus, BookOpen, Users, CheckCircle, Clock } from "lucide-react";
 
@@ -173,6 +175,24 @@ export const LibraryDashboard = () => {
               <div className="text-2xl font-bold text-accent">{stats.checkedOut}</div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Random Book Selector */}
+        <Card className="mb-8 shadow-lg" style={{ boxShadow: 'var(--shadow-gentle)' }}>
+          <CardHeader>
+            <CardTitle>Feeling Lucky?</CardTitle>
+            <CardDescription>
+              Can't decide what to read? Let us pick a random book for you!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RandomBookSelector />
+          </CardContent>
+        </Card>
+
+        {/* AI Book Finder */}
+        <div className="mb-8">
+          <AIBookFinder />
         </div>
 
         {/* Search and Add Book */}
