@@ -305,6 +305,7 @@ export const LibraryDashboard = () => {
           }}
           onConfirm={handleStatusChange}
         />
+        <TimmyChat />
       </div>
     </div>
   );
