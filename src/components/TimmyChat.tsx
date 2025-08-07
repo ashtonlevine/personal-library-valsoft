@@ -80,8 +80,15 @@ export const TimmyChat = () => {
       
       let errorMessage = "Sorry, I'm having trouble searching right now. Please try again later.";
       
-      if (error.message?.includes('quota') || error.message?.includes('billing')) {
-        errorMessage = "I'm currently having API issues. The OpenAI quota may be exceeded. Please try again later or contact support.";
+      // Handle specific error types
+      if (error.message?.includes('Failed to fetch') || error.message?.includes('NetworkError')) {
+        errorMessage = "Network connection issue. Please check your internet connection and try again.";
+      } else if (error.message?.includes('timeout')) {
+        errorMessage = "Request timed out. Please try again with a shorter query.";
+      }
+      
+      if (error.message?.includes('quota') || error.message?.includes('billing') || error.message?.includes('insufficient_quota')) {
+        errorMessage = "⚠️ OpenAI API quota exceeded. Please check your OpenAI billing and add credits to continue using Timmy's AI search features.";
       }
 
       const errorResponse: ChatMessage = {
